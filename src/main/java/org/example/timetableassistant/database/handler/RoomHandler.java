@@ -12,9 +12,14 @@ public class RoomHandler {
     private static final RoomCRUD roomCRUD = new RoomCRUD();
 
     public static String createRoom(Request req, Response res) {
+        assert req != null : "req must not be null";
+        assert res != null : "res must not be null";
+
         String name = req.queryParams("name");
         int capacity = Integer.parseInt(req.queryParams("capacity"));
+        assert capacity > 0 : "capacity must be greater than 0";
         int roomTypeId = Integer.parseInt(req.queryParams("room_type_id"));
+        assert roomTypeId > 0 : "room_type_id must be greater than 0";
 
         if (name == null || roomTypeId <= 0) {
             res.status(400);  // Bad Request
@@ -22,7 +27,7 @@ public class RoomHandler {
         }
 
         OperationResult result = roomCRUD.insertRoom(name, capacity, roomTypeId);
-
+        assert result != null : "result must not be null";
         if (result.success) {
             res.status(201);  // Created
             return "{\"message\":\"" + result.message + "\"}";
@@ -34,10 +39,12 @@ public class RoomHandler {
 
 
     public static String getRoomById(Request req, Response res) {
+        assert req != null : "req must not be null";
+        assert res != null : "res must not be null";
         int id = Integer.parseInt(req.params(":id"));
-
+        assert id > 0 : "id must be greater than 0";
         OperationResult result = roomCRUD.getRoomById(id);
-
+        assert result != null : "result must not be null";
         Gson gson = new Gson();
         Map<String, Object> response = new HashMap<>();
 
@@ -52,8 +59,10 @@ public class RoomHandler {
     }
 
     public static String getAllRooms(Request req, Response res) {
+        assert req != null : "req must not be null";
+        assert res != null : "res must not be null";
         OperationResult result = roomCRUD.getAllRooms();
-
+        assert result != null : "result must not be null";
         Gson gson = new Gson();
         Map<String, Object> response = new HashMap<>();
 
@@ -69,10 +78,17 @@ public class RoomHandler {
 
 
     public static String updateRoom(Request req, Response res) {
+        assert req != null : "req must not be null";
+        assert res != null : "res must not be null";
+
         int id = Integer.parseInt(req.params(":id"));
+        assert id > 0 : "id must be greater than 0";
+
         String newName = req.queryParams("name");
         int newCapacity = Integer.parseInt(req.queryParams("capacity"));
+        assert newCapacity > 0 : "capacity must be greater than 0";
         int newRoomTypeId = Integer.parseInt(req.queryParams("room_type_id"));
+        assert newRoomTypeId > 0 : "room_type_id must be greater than 0";
 
         if (newName == null || newRoomTypeId <= 0) {
             res.status(400);  // Bad Request
@@ -80,7 +96,7 @@ public class RoomHandler {
         }
 
         OperationResult result = roomCRUD.updateRoom(id, newName, newCapacity, newRoomTypeId);
-
+        assert result != null : "result must not be null";
         if (result.success) {
             res.status(200);  // OK
             return "{\"message\":\"" + result.message + "\"}";
@@ -92,10 +108,12 @@ public class RoomHandler {
 
 
     public static String deleteRoom(Request req, Response res) {
+        assert req != null : "req must not be null";
+        assert res != null : "res must not be null";
         int id = Integer.parseInt(req.params(":id"));
-
+        assert id > 0 : "id must be greater than 0";
         OperationResult result = roomCRUD.deleteRoom(id);
-
+        assert result != null : "result must not be null";
         if (result.success) {
             res.status(200);  // OK
             return "{\"message\":\"" + result.message + "\"}";

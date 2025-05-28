@@ -71,12 +71,12 @@ public class ClassFormController {
     }
 
     private ClassType getClassTypeFromString(String type) {
-        switch (type) {
-            case "Curs":
+        switch (type.toLowerCase()) {
+            case "curs":
                 return ClassType.COURSE;
-            case "Seminar":
+            case "seminar":
                 return ClassType.SEMINAR;
-            case "Laborator":
+            case "laborator":
                 return ClassType.LABORATORY;
             default:
                 throw new IllegalArgumentException("Unknown class type: " + type);

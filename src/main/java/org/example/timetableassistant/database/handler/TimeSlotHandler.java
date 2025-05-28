@@ -14,6 +14,9 @@ public class TimeSlotHandler {
     private static final TimeSlotCRUD timeSlotCRUD = new TimeSlotCRUD();
 
     public static String createTimeSlot(Request req, Response res) {
+        assert req != null : "req must not be null";
+        assert res != null : "res must not be null";
+
         String dayOfWeek = req.queryParams("day_of_week");
         String startTimeStr = req.queryParams("start_time");
         String endTimeStr = req.queryParams("end_time");
@@ -32,6 +35,7 @@ public class TimeSlotHandler {
         }
 
         OperationResult result = timeSlotCRUD.insertTimeSlot(dayOfWeek, startTime, endTime);
+        assert result != null : "result must not be null";
 
         if (result.success) {
             res.status(201);
@@ -43,9 +47,14 @@ public class TimeSlotHandler {
     }
 
     public static String getTimeSlotById(Request req, Response res) {
+        assert req != null : "req must not be null";
+        assert res != null : "res must not be null";
+
         int id = Integer.parseInt(req.params(":id"));
+        assert id > 0 : "id must be greater than 0";
 
         OperationResult result = timeSlotCRUD.getTimeSlotById(id);
+        assert result != null : "result must not be null";
 
         Gson gson = new Gson();
 
@@ -53,36 +62,48 @@ public class TimeSlotHandler {
             res.status(200);
             Map<String, Object> response = new HashMap<>();
             response.put("message", result.message); // lăsăm ca obiect
+            assert response != null : "response must not be null";
             return gson.toJson(response);
         } else {
             res.status(404);
             Map<String, Object> response = new HashMap<>();
             response.put("error", result.message);
+            assert response != null : "response must not be null";
             return gson.toJson(response);
         }
     }
 
 
     public static String getAllTimeSlots(Request req, Response res) {
+        assert req != null : "req must not be null";
+        assert res != null : "res must not be null";
         OperationResult result = timeSlotCRUD.getAllTimeSlots();
+        assert result != null : "result must not be null";
         Gson gson = new Gson();
 
         if (result.success) {
             res.status(200);
             Map<String, Object> response = new HashMap<>();
             response.put("message", result.message); // lăsăm ca obiect
+            assert response != null : "response must not be null";
             return gson.toJson(response);
         } else {
             res.status(404);
             Map<String, Object> response = new HashMap<>();
             response.put("error", result.message);
+            assert response != null : "response must not be null";
             return gson.toJson(response);
         }
     }
 
 
     public static String updateTimeSlot(Request req, Response res) {
+        assert req != null : "req must not be null";
+        assert res != null : "res must not be null";
+
         int id = Integer.parseInt(req.params(":id"));
+        assert id > 0 : "id must be greater than 0";
+
         String newDayOfWeek = req.queryParams("day_of_week");
         String newStartTimeStr = req.queryParams("start_time");
         String newEndTimeStr = req.queryParams("end_time");
@@ -102,7 +123,7 @@ public class TimeSlotHandler {
         }
 
         OperationResult result = timeSlotCRUD.updateTimeSlot(id, newDayOfWeek, newStartTime, newEndTime);
-
+        assert result != null : "result must not be null";
         if (result.success) {
             res.status(201);
             return "{\"message\":\"" + result.message + "\"}";
@@ -113,10 +134,12 @@ public class TimeSlotHandler {
     }
 
     public static String deleteTimeSlot(Request req, Response res) {
+        assert req != null : "req must not be null";
+        assert res != null : "res must not be null";
         int id = Integer.parseInt(req.params(":id"));
-
+        assert id > 0 : "id must be greater than 0";
         OperationResult result = timeSlotCRUD.deleteTimeSlot(id);
-
+        assert result != null : "result must not be null";
         if (result.success) {
             res.status(201);
             return "{\"message\":\"" + result.message + "\"}";
@@ -128,6 +151,7 @@ public class TimeSlotHandler {
 
 
     public static Time parseTime(String timeStr) {
+        assert timeStr != null : "timeStr must not be null";
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         try {
             return new Time(sdf.parse(timeStr).getTime());

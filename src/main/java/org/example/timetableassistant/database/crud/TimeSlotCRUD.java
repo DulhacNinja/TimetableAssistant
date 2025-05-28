@@ -15,9 +15,15 @@ public class TimeSlotCRUD {
 
 
     public OperationResult insertTimeSlot(String dayOfWeek, Time startTime, Time endTime) {
+        assert dayOfWeek != null && !dayOfWeek.isEmpty() : "dayOfWeek is empty";
+        assert startTime != null : "startTime is null";
+        assert endTime != null : "endTime is null";
+
         String query = "INSERT INTO time_slots (day_of_week, start_time, end_time) VALUES (?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
+            assert conn != null : "connection is null";
+            assert stmt != null : "stmt is null";
             stmt.setString(1, dayOfWeek);
             stmt.setTime(2, startTime);
             stmt.setTime(3, endTime);
@@ -30,9 +36,12 @@ public class TimeSlotCRUD {
 
 
     public OperationResult getTimeSlotById(int id) {
+        assert id > 0 : "id must be greater than 0";
         String query = "SELECT * FROM time_slots WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
+            assert conn != null : "connection is null";
+            assert stmt != null : "stmt is null";
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -51,9 +60,16 @@ public class TimeSlotCRUD {
     }
 
     public OperationResult updateTimeSlot(int id, String newDayOfWeek, Time newStartTime, Time newEndTime) {
+        assert id > 0 : "id must be greater than 0";
+        assert newDayOfWeek != null && !newDayOfWeek.isEmpty() : "newDayOfWeek is empty";
+        assert newStartTime != null : "newStartTime is null";
+        assert newEndTime != null : "newEndTime is null";
+
         String query = "UPDATE time_slots SET day_of_week = ?, start_time = ?, end_time = ? WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
+            assert conn != null : "connection is null";
+            assert stmt != null : "stmt is null";
             stmt.setString(1, newDayOfWeek);
             stmt.setTime(2, newStartTime);
             stmt.setTime(3, newEndTime);
@@ -70,9 +86,13 @@ public class TimeSlotCRUD {
     }
 
     public OperationResult deleteTimeSlot(int id) {
+        assert id > 0 : "id must be greater than 0";
+
         String query = "DELETE FROM time_slots WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
+            assert conn != null : "connection is null";
+            assert stmt != null : "stmt is null";
             stmt.setInt(1, id);
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -93,7 +113,9 @@ public class TimeSlotCRUD {
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
-
+            assert conn != null : "connection is null";
+            assert stmt != null : "stmt is null";
+            assert rs != null : "rs is null";
             while (rs.next()) {
                 Map<String, Object> slotInfo = new HashMap<>();
                 slotInfo.put("id", rs.getInt("id"));

@@ -11,6 +11,7 @@ public class Exporter {
     TeacherCRUD teacherCRUD = new TeacherCRUD();
     ClassCRUD classCRUD = new ClassCRUD();
     public Exporter(){}
+
     public String generateMainPage(){
         return "<html lang=\"ro\">\n" +
                 "    <head>\n" +
@@ -100,6 +101,7 @@ public class Exporter {
         result += "</ul></body></hmtl>";
         return result;
     }
+
     public void generateTeacherTimetable() {
         DisciplineCRUD disciplineCRUD = new DisciplineCRUD();
         RoomCRUD roomCRUD = new RoomCRUD();
@@ -107,16 +109,21 @@ public class Exporter {
         GroupCRUD groupCRUD = new GroupCRUD();
 
         OperationResult allTeachersResult = teacherCRUD.getAllTeachers();
+        assert allTeachersResult != null : "allTeacherResult must not be null";
         if (!allTeachersResult.success) {
             System.out.println("Eroare la preluarea profesorilor: " + allTeachersResult.message);
             return;
         }
 
         List<HashMap> teachers = (List<HashMap>) allTeachersResult.message;
+        assert teachers != null : "teachers must not be null";
 
         for (HashMap teacher : teachers) {
             String teacherName = (String) teacher.get("name");
+            assert teacherName != null && !teacherName.isEmpty(): "teacherName must not be null nor empty";
+
             Integer teacherId = (Integer) teacher.get("id");
+            assert teacherId != null && teacherId > 0: "teacherId must not be null and must be positive";
 
             StringBuilder html = new StringBuilder();
             html.append("<html lang=\"ro\">\n<head><meta charset=\"UTF-8\">\n<title>Orar Profesor ")
@@ -128,19 +135,32 @@ public class Exporter {
                     .append("</tr>\n</thead>\n<tbody>\n");
 
             OperationResult classesResult = classCRUD.getClassesByTeacherId(teacherId);
+            assert classesResult != null : "classesResult must not be null";
+
             if (!classesResult.success || classesResult.message == null) {
                 html.append("<tr><td colspan='6' align='center'>-</td></tr>\n");
             } else {
                 List<HashMap> classes = (List<HashMap>) classesResult.message;
+                assert classes != null : "classes must not be null";
+
                 if (classes.isEmpty()) {
                     html.append("<tr><td colspan='6' align='center'>-</td></tr>\n");
                 } else {
                     for (HashMap cls : classes) {
                         String disciplina = getEntityName(cls.get("discipline_id"), disciplineCRUD);
+                        assert disciplina != null && !disciplina.isEmpty(): "disciplina must not be null nor empty";
+
                         String sala = getEntityName(cls.get("room_id"), roomCRUD);
+                        assert sala != null && !sala.isEmpty(): "sala must not be null nor empty";
+
                         String[] time = getTimeSlot(cls.get("time_slot_id"), timeSlotCRUD);
+                        assert time != null : "time must not be null";
+
                         String grupa = getGroupName(cls.get("group_id"), groupCRUD);
+                        assert grupa != null && !grupa.isEmpty(): "grupa must not be null nor empty";
+
                         String classType = (String) cls.getOrDefault("class_type", "-");
+                        assert classType != null && !classType.isEmpty(): "classType must not be null nor empty";
 
                         html.append("<tr>")
                                 .append("<td>").append(emptyOrDash(disciplina)).append("</td>")
@@ -165,27 +185,38 @@ public class Exporter {
 
 
     private String getEntityName(Object id, Object crud) {
+        assert id != null : "id must not be null";
+        assert crud != null : "crud must not be null";
+
         if (id == null) return "";
         OperationResult result = null;
 
         if (crud instanceof DisciplineCRUD) {
             result = ((DisciplineCRUD) crud).getDisciplineById((int) id);
+            assert result != null : "result must not be null";
         } else if (crud instanceof RoomCRUD) {
             result = ((RoomCRUD) crud).getRoomById((int) id);
+            assert result != null : "result must not be null";
         }
 
         if (result != null && result.success) {
             HashMap data = (HashMap) result.message;
+            assert data != null : "data must not be null";
             return (String) data.getOrDefault("name", "");
         }
         return "";
     }
 
     private String[] getTimeSlot(Object id, TimeSlotCRUD crud) {
+        assert id != null : "id must not be null";
+        assert crud != null : "crud must not be null";
+
         if (id == null) return new String[]{"", ""};
         OperationResult result = crud.getTimeSlotById((int) id);
         if (result.success) {
             HashMap data = (HashMap) result.message;
+            assert data != null : "data must not be null";
+
             String day = (String) data.getOrDefault("day_of_week", "");
             String time = data.getOrDefault("start_time", "") + " - " + data.getOrDefault("end_time", "");
             return new String[]{day, time};
@@ -194,16 +225,22 @@ public class Exporter {
     }
 
     private String getGroupName(Object id, GroupCRUD crud) {
+        assert id != null : "id must not be null";
+        assert crud != null : "crud must not be null";
+
         if (id == null) return "";
         OperationResult result = crud.getGroupById((int) id);
         if (result.success) {
             HashMap data = (HashMap) result.message;
+            assert data != null : "data must not be null";
             return (String) data.getOrDefault("name", "");
         }
         return "";
     }
 
     private void saveHtmlToFile(String filename, String content) {
+        assert filename != null && !filename.isEmpty() : "filename must not be null nor empty";
+        assert content != null && !content.isEmpty() : "content must not be null nor empty";
         try {
             java.nio.file.Files.write(java.nio.file.Paths.get(filename), content.getBytes());
         } catch (IOException e) {
@@ -290,16 +327,21 @@ public class Exporter {
         TeacherCRUD teacherCRUD = new TeacherCRUD();
 
         OperationResult allRoomsResult = roomCRUD.getAllRooms();
+        assert allRoomsResult != null : "allRoomsResult must not be null";
+
         if (!allRoomsResult.success) {
             System.out.println("Eroare la preluarea sălilor: " + allRoomsResult.message);
             return;
         }
 
         List<HashMap> rooms = (List<HashMap>) allRoomsResult.message;
+        assert rooms != null : "rooms must not be null";
 
         for (HashMap room : rooms) {
             String roomName = (String) room.get("name");
+            assert roomName != null && !roomName.isEmpty() : "roomName must not be null";
             Integer roomId = (Integer) room.get("id");
+            assert roomId != null && roomId > 0: "roomId must not be null and must be positive";
 
             StringBuilder html = new StringBuilder();
             html.append("<html lang=\"ro\">\n<head><meta charset=\"UTF-8\">\n<title>Orar Sala ")
@@ -311,19 +353,31 @@ public class Exporter {
                     .append("</tr>\n</thead>\n<tbody>\n");
 
             OperationResult classesResult = classCRUD.getClassesByRoomId(roomId);
+            assert classesResult != null : "classesResult must not be null";
+
             if (!classesResult.success || classesResult.message == null) {
                 html.append("<tr><td colspan='6' align='center'></td></tr>\n");
             } else {
                 List<HashMap> classes = (List<HashMap>) classesResult.message;
+                assert classes != null : "classes must not be null";
                 if (classes.isEmpty()) {
                     html.append("<tr><td colspan='6' align='center'></td></tr>\n");
                 } else {
                     for (HashMap cls : classes) {
                         String profesor = getTeacherName(cls.get("teacher_id"), teacherCRUD);  // Preluăm numele profesorului
+                        assert profesor != null && !profesor.isEmpty(): "profesor must not be null nor empty";
+
                         String disciplina = getEntityName(cls.get("discipline_id"), disciplineCRUD);
+                        assert disciplina != null && !disciplina.isEmpty(): "disciplina must not be null nor empty";
+
                         String grupa = getGroupName(cls.get("group_id"), groupCRUD);
+                        assert grupa != null && !grupa.isEmpty(): "grupa must not be null nor empty";
+
                         String classType = (String) cls.getOrDefault("class_type", "");
+                        assert classType != null && !classType.isEmpty(): "classType must not be null nor empty";
+
                         String[] time = getTimeSlot(cls.get("time_slot_id"), timeSlotCRUD);
+                        assert time != null : "time must not be null";
 
                         html.append("<tr>")
                                 .append("<td>").append(emptyOrDash(profesor)).append("</td>")
@@ -347,10 +401,14 @@ public class Exporter {
     }
 
     private String getTeacherName(Object id, TeacherCRUD teacherCRUD) {
+        assert id != null : "id must not be null";
+        assert teacherCRUD != null : "teacherCRUD must not be null";
+
         if (id == null) return "";
         OperationResult result = teacherCRUD.getTeacherById((int) id);
         if (result.success) {
             HashMap data = (HashMap) result.message;
+            assert data != null : "data must not be null";
             return (String) data.getOrDefault("name", "");
         }
         return "";
@@ -366,16 +424,22 @@ public class Exporter {
         TeacherCRUD teacherCRUD = new TeacherCRUD();
 
         OperationResult allGroupsResult = groupCRUD.getAllGroups();
+        assert allGroupsResult != null : "allGroupsResult must not be null";
+
         if (!allGroupsResult.success) {
             System.out.println("Eroare la preluarea grupelor: " + allGroupsResult.message);
             return;
         }
 
         List<HashMap> groups = (List<HashMap>) allGroupsResult.message;
+        assert groups != null : "groups must not be null";
 
         for (HashMap group : groups) {
             String groupName = (String) group.get("semiyear") + group.get("number");
+            assert groupName != null && !groupName.isEmpty() : "groupName must not be null nor empty";
+
             Integer groupId = (Integer) group.get("id");
+            assert groupId != null && groupId > 0: "groupId must not be null nor empty";
 
             StringBuilder html = new StringBuilder();
             html.append("<html lang=\"ro\">\n<head><meta charset=\"UTF-8\">\n<title>Orar Grupa ")
@@ -387,19 +451,32 @@ public class Exporter {
                     .append("</tr>\n</thead>\n<tbody>\n");
 
             OperationResult classesResult = classCRUD.getClassesByGroupId(groupId);
+            assert classesResult != null : "classesResult must not be null";
+
             if (!classesResult.success || classesResult.message == null) {
                 html.append("<tr><td colspan='6' align='center'></td></tr>\n");
             } else {
                 List<HashMap> classes = (List<HashMap>) classesResult.message;
+                assert classes != null : "classes must not be null";
+
                 if (classes.isEmpty()) {
                     html.append("<tr><td colspan='6' align='center'></td></tr>\n");
                 } else {
                     for (HashMap cls : classes) {
                         String profesor = getTeacherName(cls.get("teacher_id"), teacherCRUD);  // Preluăm numele profesorului
+                        assert profesor != null && !profesor.isEmpty() : "profesor must not be null nor empty";
+
                         String disciplina = getEntityName(cls.get("discipline_id"), disciplineCRUD);
+                        assert disciplina != null && !disciplina.isEmpty() : "disciplina must not be null nor empty";
+
                         String sala = getEntityName(cls.get("room_id"), roomCRUD);
+                        assert sala != null && !sala.isEmpty() : "sala must not be null nor empty";
+
                         String classType = (String) cls.getOrDefault("class_type", "");
+                        assert classType != null && !classType.isEmpty() : "classType must not be null nor empty";
+
                         String[] time = getTimeSlot(cls.get("time_slot_id"), timeSlotCRUD);
+                        assert time != null : "time must not be null";
 
                         html.append("<tr>")
                                 .append("<td>").append(emptyOrDash(profesor)).append("</td>")

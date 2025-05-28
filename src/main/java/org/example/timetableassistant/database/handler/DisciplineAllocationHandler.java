@@ -13,6 +13,9 @@ public class DisciplineAllocationHandler {
     private static final DisciplineAllocationsCRUD disciplineAllocationCRUD = new DisciplineAllocationsCRUD();
 
     public static String createDisciplineAllocation(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         int disciplineId = Integer.parseInt(req.queryParams("discipline_id"));
         int teacherId = Integer.parseInt(req.queryParams("teacher_id"));
         int classTypeId = Integer.parseInt(req.queryParams("class_type_id"));
@@ -24,6 +27,7 @@ public class DisciplineAllocationHandler {
         }
 
         OperationResult result = disciplineAllocationCRUD.insertDisciplineAllocation(disciplineId, teacherId, classTypeId, hoursPerWeek);
+        assert result != null : "result cannot be null";
 
         if (result.success) {
             res.status(201);
@@ -35,10 +39,13 @@ public class DisciplineAllocationHandler {
     }
 
     public static String getDisciplineAllocationById(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         int id = Integer.parseInt(req.params(":id"));
+        assert id > 0 : "id must be greater than 0";
 
         OperationResult result = disciplineAllocationCRUD.getDisciplineAllocationById(id);
-
+        assert result != null : "result cannot be null";
         Gson gson = new Gson();
 
         if (result.success) {
@@ -55,7 +62,10 @@ public class DisciplineAllocationHandler {
     }
 
     public static String getAllDisciplineAllocations(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         OperationResult result = disciplineAllocationCRUD.getAllDisciplineAllocations();
+        assert result != null : "result cannot be null";
 
         Gson gson = new Gson();
         Map<String, Object> response = new HashMap<>();
@@ -71,15 +81,19 @@ public class DisciplineAllocationHandler {
     }
 
     public static String getAllDisciplineAllocationsByTeacherId(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         int teacherId;
         try {
             teacherId = Integer.parseInt(req.params(":id"));
+            assert teacherId > 0 : "teacherId must be greater than 0";
         } catch (NumberFormatException e) {
             res.status(400);
             return "{\"error\":\"ID invalid pentru profesor.\"}";
         }
 
         OperationResult result = disciplineAllocationCRUD.getAllDisciplineAllocationsByTeacherId(teacherId);
+        assert result != null : "result cannot be null";
 
         Gson gson = new Gson();
         Map<String, Object> response = new HashMap<>();
@@ -96,15 +110,20 @@ public class DisciplineAllocationHandler {
     }
 
     public static String getAllDisciplineAllocationsByDisciplineId(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         int disciplineId;
         try {
             disciplineId = Integer.parseInt(req.params(":id"));
+            assert disciplineId > 0 : "disciplineId must be greater than 0";
         } catch (NumberFormatException e) {
             res.status(400);
             return "{\"error\":\"ID invalid pentru disciplină.\"}";
         }
 
         OperationResult result = disciplineAllocationCRUD.getAllDisciplineAllocationsByDisciplineId(disciplineId);
+        assert result != null : "result cannot be null";
 
         Gson gson = new Gson();
         Map<String, Object> response = new HashMap<>();
@@ -124,7 +143,12 @@ public class DisciplineAllocationHandler {
 
 
     public static String updateDisciplineAllocation(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         int id = Integer.parseInt(req.params(":id"));
+        assert id > 0 : "id must be greater than 0";
+
         int newDisciplineId = Integer.parseInt(req.queryParams("discipline_id"));
         int newTeacherId = Integer.parseInt(req.queryParams("teacher_id"));
         int newClassTypeId = Integer.parseInt(req.queryParams("class_type_id"));
@@ -136,7 +160,7 @@ public class DisciplineAllocationHandler {
         }
 
         OperationResult result = disciplineAllocationCRUD.updateDisciplineAllocation(id, newDisciplineId, newTeacherId, newClassTypeId, newHoursPerWeek);
-
+        assert result != null : "result cannot be null";
         if (result.success) {
             res.status(201);
             return "{\"message\":\"" + result.message + "\"}";
@@ -147,9 +171,13 @@ public class DisciplineAllocationHandler {
     }
 
     public static String deleteDisciplineAllocation(Request req, Response res) {
-        int id = Integer.parseInt(req.params(":id"));
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
 
+        int id = Integer.parseInt(req.params(":id"));
+        assert id > 0 : "id must be greater than 0";
         OperationResult result = disciplineAllocationCRUD.deleteDisciplineAllocation(id);
+        assert result != null : "result cannot be null";
 
         if (result.success) {
             res.status(201);

@@ -16,6 +16,9 @@ public class RoomCRUD {
 
 
     public OperationResult insertRoom(String name, int capacity, int roomTypeId) {
+        assert name != null : "Name is null";
+        assert capacity > 0 : "Capacity must be greater than 0";
+        assert roomTypeId > 0 : "RoomTypeId must be greater than 0";
         String query = "INSERT INTO rooms (name, capacity, room_type_id) VALUES (?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -32,6 +35,7 @@ public class RoomCRUD {
 
 
     public OperationResult getRoomById(int id) {
+        assert id > 0 : "Id must be greater than 0";
         String query = "SELECT * FROM rooms WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -84,6 +88,10 @@ public class RoomCRUD {
 
 
     public OperationResult updateRoom(int id, String newName, int newCapacity, int newRoomTypeId) {
+        assert id > 0 : "Id must be greater than 0";
+        assert newName != null : "Name is null";
+        assert newCapacity > 0 : "Capacity must be greater than 0";
+        assert newRoomTypeId > 0 : "RoomTypeId must be greater than 0";
         String query = "UPDATE rooms SET name = ?, capacity = ?, room_type_id = ? WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -105,6 +113,7 @@ public class RoomCRUD {
 
 
     public OperationResult deleteRoom(int id) {
+        assert id > 0 : "Id must be greater than 0";
         String query = "DELETE FROM rooms WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {

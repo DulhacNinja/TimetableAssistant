@@ -13,6 +13,9 @@ public class SemiyearHandler {
     private static final SemiyearCRUD semiyearsCRUD = new SemiyearCRUD();
 
     public static String createSemiyear(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         String name = req.queryParams("name");
         String yearParam = req.queryParams("study_year");
 
@@ -30,7 +33,7 @@ public class SemiyearHandler {
         }
 
         OperationResult result = semiyearsCRUD.insertSemiyear(name, studyYear);
-
+        assert result != null : "result cannot be null";
         if (result.success) {
             res.status(201);
             return "{\"message\":\"" + result.message + "\"}";
@@ -41,6 +44,9 @@ public class SemiyearHandler {
     }
 
     public static String getSemiyearById(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         int id;
         try {
             id = Integer.parseInt(req.params(":id"));
@@ -50,6 +56,8 @@ public class SemiyearHandler {
         }
 
         OperationResult result = semiyearsCRUD.getSemiyearById(id);
+        assert result != null : "result cannot be null";
+
         Gson gson = new Gson();
 
         if (result.success) {
@@ -66,7 +74,11 @@ public class SemiyearHandler {
     }
 
     public static String getAllSemiyears(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         OperationResult result = semiyearsCRUD.getAllSemiyears();
+        assert result != null : "result cannot be null";
         Gson gson = new Gson();
         Map<String, Object> response = new HashMap<>();
 
@@ -84,6 +96,9 @@ public class SemiyearHandler {
 
 
     public static String getSemiyearByNameAndYear(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         String name = req.queryParams("name");
         String yearParam = req.queryParams("study_year");
 
@@ -101,6 +116,7 @@ public class SemiyearHandler {
         }
 
         OperationResult result = semiyearsCRUD.getSemiyearByNameAndYear(name, studyYear);
+        assert result != null : "result cannot be null";
         Gson gson = new Gson();
 
         if (result.success) {
@@ -117,6 +133,8 @@ public class SemiyearHandler {
     }
 
     public static String updateSemiyear(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         int id;
         try {
             id = Integer.parseInt(req.params(":id"));
@@ -142,6 +160,7 @@ public class SemiyearHandler {
         }
 
         OperationResult result = semiyearsCRUD.updateSemiyear(id, newName, newStudyYear);
+        assert result != null : "result cannot be null";
 
         if (result.success) {
             res.status(200);
@@ -153,6 +172,8 @@ public class SemiyearHandler {
     }
 
     public static String deleteSemiyear(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         int id;
         try {
             id = Integer.parseInt(req.params(":id"));
@@ -162,6 +183,7 @@ public class SemiyearHandler {
         }
 
         OperationResult result = semiyearsCRUD.deleteSemiyear(id);
+        assert result != null : "result cannot be null";
 
         if (result.success) {
             res.status(200);

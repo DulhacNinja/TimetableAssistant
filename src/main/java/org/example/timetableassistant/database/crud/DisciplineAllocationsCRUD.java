@@ -15,6 +15,11 @@ public class DisciplineAllocationsCRUD {
     private static final String PASSWORD = DatabaseConfig.getPassword();
 
     public OperationResult insertDisciplineAllocation(int disciplineId, int teacherId, int classTypeId, int hoursPerWeek) {
+        assert disciplineId > 0 : "disciplineId must be greater than 0";
+        assert teacherId > 0 : "teacherId must be greater than 0";
+        assert classTypeId > 0 : "classTypeId must be greater than 0";
+        assert hoursPerWeek > 0 : "hoursPerWeek must be greater than 0";
+
         String query = "INSERT INTO discipline_allocations (discipline_id, teacher_id, class_type_id, hours_per_week) VALUES (?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -30,6 +35,7 @@ public class DisciplineAllocationsCRUD {
     }
 
     public OperationResult getDisciplineAllocationById(int id) {
+        assert id > 0 : "id must be greater than 0";
         String query = "SELECT * FROM discipline_allocations WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -91,6 +97,11 @@ public class DisciplineAllocationsCRUD {
 
 
     public OperationResult updateDisciplineAllocation(int id, int newDisciplineId, int newTeacherId, int newClassTypeId, int newHoursPerWeek) {
+        assert id > 0 : "id must be greater than 0";
+        assert newDisciplineId > 0 : "newDisciplineId must be greater than 0";
+        assert newTeacherId > 0 : "newTeacherId must be greater than 0";
+        assert newClassTypeId > 0 : "newClassTypeId must be greater than 0";
+        assert newHoursPerWeek > 0 : "newHoursPerWeek must be greater than 0";
         String query = "UPDATE discipline_allocations SET discipline_id = ?, teacher_id = ?, class_type_id = ?, hours_per_week = ? WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -112,6 +123,7 @@ public class DisciplineAllocationsCRUD {
 
 
     public OperationResult getAllDisciplineAllocationsByTeacherId(int teacherId) {
+        assert teacherId > 0 : "teacherId must be greater than 0";
         String query = "SELECT * FROM discipline_allocations WHERE teacher_id = ?";
         List<Map<String, Object>> allocations = new ArrayList<>();
 
@@ -146,6 +158,7 @@ public class DisciplineAllocationsCRUD {
     }
 
     public OperationResult getAllDisciplineAllocationsByDisciplineId(int disciplineId) {
+        assert disciplineId > 0 : "disciplineId must be greater than 0";
         String query = "SELECT * FROM discipline_allocations WHERE discipline_id = ?";
         List<Map<String, Object>> allocations = new ArrayList<>();
 
@@ -182,6 +195,7 @@ public class DisciplineAllocationsCRUD {
 
 
     public OperationResult deleteDisciplineAllocation(int id) {
+        assert id > 0 :"id must be greater than 0";
         String query = "DELETE FROM discipline_allocations WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {

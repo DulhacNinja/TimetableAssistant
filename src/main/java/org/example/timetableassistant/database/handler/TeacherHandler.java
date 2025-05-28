@@ -11,6 +11,9 @@ public class TeacherHandler {
     private static final TeacherCRUD teacherCRUD = new TeacherCRUD();
 
     public static String createTeacher(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         String name = req.queryParams("name");
 
         if (name == null) {
@@ -19,6 +22,7 @@ public class TeacherHandler {
         }
 
         OperationResult result = teacherCRUD.insertTeacher(name);
+        assert result != null : "result cannot be null";
 
         if (result.success) {
             res.status(201); // Created
@@ -30,9 +34,15 @@ public class TeacherHandler {
     }
 
     public static String getTeacherById(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         int id = Integer.parseInt(req.params(":id"));
+        assert id > 0 : "id must be greater than 0";
 
         OperationResult result = teacherCRUD.getTeacherById(id);
+        assert result != null : "result cannot be null";
+
         Gson gson = new Gson();
 
         if (result.success) {
@@ -49,7 +59,11 @@ public class TeacherHandler {
     }
 
     public static String getAllTeachers(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         OperationResult result = teacherCRUD.getAllTeachers();
+        assert result != null : "result cannot be null";
         Gson gson = new Gson();
         Map<String, Object> response = new HashMap<>();
 
@@ -66,7 +80,12 @@ public class TeacherHandler {
 
 
     public static String updateTeacher(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         int id = Integer.parseInt(req.params(":id"));
+        assert id > 0 : "id must be greater than 0";
+
         String newName = req.queryParams("name");
 
         if (newName == null) {
@@ -87,9 +106,14 @@ public class TeacherHandler {
 
 
     public static String deleteTeacher(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         int id = Integer.parseInt(req.params(":id"));
+        assert id > 0 : "id must be greater than 0";
 
         OperationResult result = teacherCRUD.deleteTeacher(id);
+        assert result != null : "result cannot be null";
 
         if (result.success) {
             res.status(200);
@@ -102,6 +126,9 @@ public class TeacherHandler {
 
 
     public static String getTeacherByName(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         String name = req.params("name");
 
         if (name == null) {
@@ -110,6 +137,8 @@ public class TeacherHandler {
         }
 
         OperationResult result = teacherCRUD.getTeacherByName(name);
+        assert result != null : "result cannot be null";
+
         Gson gson = new Gson();
 
         if (result.success) {

@@ -19,13 +19,21 @@ public class DisciplineAllocationService {
     private static final String BASE_URL = "http://localhost:4567/db/discipline-allocation";
 
     public static String createDisciplineAllocation(int disciplineId, int teacherId, int classTypeId, int hoursPerWeek) throws Exception {
+        assert disciplineId > 0 : "disciplineID must be positive";
+        assert teacherId > 0 : "teacherID must be positive";
+        assert classTypeId > 0 : "classTypeID must be positive";
+        assert hoursPerWeek > 0 : "hoursPerWeek must be positive";
+
         URL url = new URI(BASE_URL + "?discipline_id=" + disciplineId +
                                         "&teacher_id=" + teacherId +
                                         "&class_type_id=" + classTypeId +
                                         "&hours_per_week=" + hoursPerWeek)
                         .toURL();
+        assert url != null : "URL must not be null";
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        assert connection != null : "Connection must not be null";
+
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
 
@@ -39,30 +47,55 @@ public class DisciplineAllocationService {
 
     public static List<DisciplineAllocation> getAllDisciplineAllocations() throws Exception {
         URL url = new URI(BASE_URL + "/get-all").toURL();
+        assert url != null : "URL must not be null";
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        assert connection != null : "Connection must not be null";
+
         connection.setRequestMethod("GET");
 
         int responseCode = connection.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            assert in != null : "Input stream must not be null";
+
             StringBuilder response = new StringBuilder();
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
+                assert inputLine != null : "Input stream must not be null";
                 response.append(inputLine);
             }
             in.close();
 
             JSONObject jsonResponse = new JSONObject(response.toString());
+            assert jsonResponse != null : "Response must not be null";
+
             JSONArray daArray = jsonResponse.getJSONArray("message");
+            assert daArray != null : "Message array must not be null";
+
             List<DisciplineAllocation> das = new ArrayList<>();
+            assert das.size() <= daArray.length() : "das must have less or equal amount of elements than daArray";
             for (int i = 0; i < daArray.length(); i++) {
                 JSONObject roomObj = daArray.getJSONObject(i);
+                assert roomObj != null : "Room object must not be null";
+
                 int id = roomObj.getInt("id");
+                assert id > 0 : "id must be positive";
+
                 Discipline discipline = DisciplineService.getDisciplineById(roomObj.getInt("discipline_id"));
+                assert discipline != null : "Discipline must not be null";
+
                 Teacher teacher = TeacherService.getTeacherById(roomObj.getInt("teacher_id"));
+                assert teacher != null : "Teacher must not be null";
+
                 ClassType classType = ClassType.fromInt(roomObj.getInt("class_type_id"));
-                das.add(new DisciplineAllocation(id, discipline, teacher, classType));
+                assert classType != null : "ClassType must not be null";
+
+                DisciplineAllocation d = new DisciplineAllocation(id, discipline, teacher, classType);
+                assert d != null : "Discipline allocation must not be null";
+
+                das.add(d);
+                assert das.size() <= daArray.length() : "das must have less or equal amount of elements than daArray";
             }
             return das;
         } else {
@@ -71,31 +104,59 @@ public class DisciplineAllocationService {
     }
 
     public static List<DisciplineAllocation> getByTeacherId(int id) throws Exception {
-        URL url = new URI(BASE_URL + "/get-by-teacher-id/" + id).toURL();
+        assert id > 0 : "id must be positive";
 
+        URL url = new URI(BASE_URL + "/get-by-teacher-id/" + id).toURL();
+        assert url != null : "URL must not be null";
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        assert connection != null : "Connection must not be null";
+
         connection.setRequestMethod("GET");
 
         int responseCode = connection.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            assert in != null : "Input stream must not be null";
+
             StringBuilder response = new StringBuilder();
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
+                assert inputLine != null : "inputLine must not be null";
                 response.append(inputLine);
             }
             in.close();
 
             JSONObject jsonResponse = new JSONObject(response.toString());
+            assert jsonResponse != null : "Response must not be null";
+
             JSONArray daArray = jsonResponse.getJSONArray("message");
+            assert daArray != null : "Message array must not be null";
+
             List<DisciplineAllocation> das = new ArrayList<>();
+            assert das.size() <= daArray.length() : "das must have less or equal amount of elements than daArray";
+
             for (int i = 0; i < daArray.length(); i++) {
                 JSONObject roomObj = daArray.getJSONObject(i);
+                assert roomObj != null : "Room object must not be null";
+
                 int das_id = roomObj.getInt("id");
+                assert das_id > 0 : "id must be positive";
+
                 Discipline discipline = DisciplineService.getDisciplineById(roomObj.getInt("discipline_id"));
+                assert discipline != null : "Discipline must not be null";
+
                 Teacher teacher = TeacherService.getTeacherById(roomObj.getInt("teacher_id"));
+                assert teacher != null : "Teacher must not be null";
+
                 ClassType classType = ClassType.valueOf(roomObj.getString("class_type"));
-                das.add(new DisciplineAllocation(das_id, discipline, teacher, classType));
+                assert classType != null : "ClassType must not be null";
+
+                DisciplineAllocation d = new DisciplineAllocation(id, discipline, teacher, classType);
+                assert d != null : "Discipline allocation must not be null";
+
+                das.add(d);
+                assert das.size() <= daArray.length() : "das must have less or equal amount of elements than daArray";
+
             }
             return das;
         } else {
@@ -104,31 +165,58 @@ public class DisciplineAllocationService {
     }
 
     public static List<DisciplineAllocation> getByDisciplineId(int id) throws Exception {
+        assert id > 0 : "id must be positive";
+
         URL url = new URI(BASE_URL + "/get-by-discipline-id/" + id).toURL();
+        assert url != null : "URL must not be null";
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
+        assert connection != null : "Connection must not be null";
 
+        connection.setRequestMethod("GET");
         int responseCode = connection.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            assert in != null : "Input stream must not be null";
             StringBuilder response = new StringBuilder();
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
+                assert inputLine != null : "inputLine must not be null";
                 response.append(inputLine);
             }
             in.close();
 
             JSONObject jsonResponse = new JSONObject(response.toString());
+            assert jsonResponse != null : "Response must not be null";
+
             JSONArray daArray = jsonResponse.getJSONArray("message");
+            assert daArray != null : "Message array must not be null";
+
             List<DisciplineAllocation> das = new ArrayList<>();
+            assert das.size() <= daArray.length() : "das must have less or equal amount of elements than daArray";
+
             for (int i = 0; i < daArray.length(); i++) {
                 JSONObject roomObj = daArray.getJSONObject(i);
+                assert roomObj != null : "Room object must not be null";
+
                 int das_id = roomObj.getInt("id");
+                assert das_id > 0 : "id must be positive";
+
                 Discipline discipline = DisciplineService.getDisciplineById(roomObj.getInt("discipline_id"));
+                assert discipline != null : "Discipline must not be null";
+
                 Teacher teacher = TeacherService.getTeacherById(roomObj.getInt("teacher_id"));
+                assert teacher != null : "Teacher must not be null";
+
                 ClassType classType = ClassType.valueOf(roomObj.getString("class_type"));
-                das.add(new DisciplineAllocation(das_id, discipline, teacher, classType));
+                assert classType != null : "ClassType must not be null";
+
+                DisciplineAllocation d = new DisciplineAllocation(id, discipline, teacher, classType);
+                assert d != null : "Discipline allocation must not be null";
+
+                das.add(d);
+                assert das.size() <= daArray.length() : "das must have less or equal amount of elements than daArray";
+
             }
             return das;
         } else {
@@ -137,10 +225,14 @@ public class DisciplineAllocationService {
     }
 
     public static void deleteAllocation(int id) {
+        assert id > 0 : "id must be positive";
         try {
             URL url = new URI(BASE_URL + "/" + id).toURL();
+            assert url != null : "URL must not be null";
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            assert connection != null : "Connection must not be null";
+
             connection.setRequestMethod("DELETE");
 
             int responseCode = connection.getResponseCode();

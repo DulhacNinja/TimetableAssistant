@@ -15,6 +15,9 @@ public class GroupHandler {
     private static final GroupCRUD groupCRUD = new GroupCRUD();
 
     public static String createGroup(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         String numberStr = req.queryParams("number");
         String semiyearVal = req.queryParams("semiyear");
 
@@ -25,8 +28,11 @@ public class GroupHandler {
 
         try{
             int number = Integer.parseInt(numberStr);
+            assert number > 0 : "Number must be greater than 0";
             Semiyear semiyear = Semiyear.fromString(semiyearVal);
+            assert semiyear != null : "Semiyear cannot be null";
             OperationResult result = groupCRUD.insertGroup(number, semiyear.getValue());
+            assert result != null : "result cannot be null";
 
             if (result.success) {
                 res.status(201);
@@ -42,8 +48,13 @@ public class GroupHandler {
     }
 
     public static String getGroupById(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         int id = Integer.parseInt(req.params(":id"));
+        assert id > 0 : "id must be greater than 0";
         OperationResult result = groupCRUD.getGroupById(id);
+        assert result != null : "result cannot be null";
         Gson gson = new Gson();
 
         if (result.success) {
@@ -60,8 +71,10 @@ public class GroupHandler {
     }
 
     public static String getAllGroups(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         OperationResult result = groupCRUD.getAllGroups();
-
+        assert result != null : "result cannot be null";
         Gson gson = new Gson();
         if (result.success) {
             res.status(200);  // OK
@@ -78,7 +91,10 @@ public class GroupHandler {
 
 
     public static String updateGroup(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         int id = Integer.parseInt(req.params(":id"));
+        assert id > 0 : "id must be greater than 0";
         String newNumberStr = req.queryParams("number");
         String newSemiyear = req.queryParams("semiyear");
 
@@ -89,8 +105,11 @@ public class GroupHandler {
 
         try {
             int newNumber = Integer.parseInt(newNumberStr);
+            assert newNumber > 0 : "Number must be greater than 0";
             Semiyear semiyear = Semiyear.fromString(newSemiyear);
+            assert semiyear != null : "Semiyear cannot be null";
             OperationResult result = groupCRUD.updateGroup(id, newNumber, semiyear.getValue());
+            assert result != null : "result cannot be null";
 
             if (result.success) {
                 res.status(200);
@@ -106,9 +125,13 @@ public class GroupHandler {
     }
 
     public static String deleteGroup(Request req, Response res) {
-        int id = Integer.parseInt(req.params(":id"));
-        OperationResult result = groupCRUD.deleteGroup(id);
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
 
+        int id = Integer.parseInt(req.params(":id"));
+        assert id > 0 : "id must be greater than 0";
+        OperationResult result = groupCRUD.deleteGroup(id);
+        assert result != null : "result cannot be null";
         if (result.success) {
             res.status(200);
             return "{\"message\":\"" + result.message + "\"}";
@@ -119,6 +142,8 @@ public class GroupHandler {
     }
 
     public static String getGroupByNumberAndSemiyear(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         String numberStr = req.queryParams("number");
         String semiyear = req.queryParams("semiyear");
 
@@ -128,7 +153,9 @@ public class GroupHandler {
         }
 
         int number = Integer.parseInt(numberStr);
+        assert number > 0 : "Number must be greater than 0";
         OperationResult result = groupCRUD.getGroupByNumberAndSemiyear(number, semiyear);
+        assert result != null : "result cannot be null";
         Gson gson = new Gson();
 
         if (result.success) {

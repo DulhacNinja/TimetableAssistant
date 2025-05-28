@@ -15,6 +15,7 @@ public class TeacherCRUD {
 
 
     public OperationResult insertTeacher(String name) {
+        assert name != null : "Name is null";
         String query = "INSERT INTO teachers (name) VALUES (?)";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -28,6 +29,7 @@ public class TeacherCRUD {
 
 
     public OperationResult getTeacherById(int id) {
+        assert id > 0 : "Id must be greater than 0";
         String query = "SELECT * FROM teachers WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -75,6 +77,8 @@ public class TeacherCRUD {
 
 
     public OperationResult updateTeacher(int id, String newName) {
+        assert id > 0 : "Id must be greater than 0";
+        assert newName != null : "Name is null";
         String query = "UPDATE teachers SET name = ? WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -93,6 +97,7 @@ public class TeacherCRUD {
 
 
     public OperationResult deleteTeacher(int id) {
+        assert id > 0 : "Id must be greater than 0";
         String query = "DELETE FROM teachers WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -110,6 +115,7 @@ public class TeacherCRUD {
 
 
     public OperationResult getTeacherByName(String name) {
+        assert name != null : "Name is null";
         String query = "SELECT * FROM teachers WHERE name LIKE ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {

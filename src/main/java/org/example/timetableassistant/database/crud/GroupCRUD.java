@@ -16,6 +16,8 @@ public class GroupCRUD {
     private static final String PASSWORD = DatabaseConfig.getPassword();
 
     public OperationResult insertGroup(int number, String semiyear) {
+        assert number > 0 : "number must be greater than 0";
+        assert semiyear != null : "semiyear must not be null";
         String query = "INSERT INTO groups (number, semiyear) VALUES (?, ?::semiyear_enum)";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -30,6 +32,7 @@ public class GroupCRUD {
 
 
     public OperationResult getGroupById(int id) {
+        assert id > 0 : "id must be greater than 0";
         String query = "SELECT * FROM groups WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -50,6 +53,7 @@ public class GroupCRUD {
     }
 
     public OperationResult getGroupByNumberAndSemiyear(int number, String semiyear) {
+        assert number > 0 : "number must be greater than 0";
         String query = "SELECT * FROM groups WHERE number = ? AND semiyear = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -100,6 +104,9 @@ public class GroupCRUD {
 
 
     public OperationResult updateGroup(int id, int newNumber, String newSemiyear) {
+        assert id > 0 : "id must be greater than 0";
+        assert newNumber > 0 : "newNumber must be greater than 0";
+        assert newSemiyear != null : "newSemiyear must not be null";
         String query = "UPDATE groups SET number = ?, semiyear = ?::semiyear_enum WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -119,6 +126,7 @@ public class GroupCRUD {
 
 
     public OperationResult deleteGroup(int id) {
+        assert id > 0 : "id must be greater than 0";
         String query = "DELETE FROM groups WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {

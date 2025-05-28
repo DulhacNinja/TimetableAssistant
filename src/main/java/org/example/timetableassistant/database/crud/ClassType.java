@@ -8,14 +8,17 @@ public enum ClassType {
     private final int value;
 
     ClassType(int value) {
+        assert value >= 1 && value <= 3;
         this.value = value;
     }
 
     public int getValue() {
+        assert value >= 1 && value <= 3;
         return value;
     }
 
     public static ClassType fromInt(int value) {
+        assert value >= 1 && value <= 3;
         for (ClassType type : ClassType.values()) {
             if (type.getValue() == value) {
                 return type;

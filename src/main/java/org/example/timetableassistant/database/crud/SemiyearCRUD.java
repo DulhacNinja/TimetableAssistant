@@ -16,6 +16,8 @@ public class SemiyearCRUD {
 
 
     public OperationResult insertSemiyear(String name, int studyYear) {
+        assert name != null : "Name is null";
+        assert studyYear > 0 : "Study year must be greater than 0";
         String query = "INSERT INTO semiyears (name, study_year) VALUES (?, ?)";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -29,6 +31,7 @@ public class SemiyearCRUD {
     }
 
     public OperationResult getSemiyearById(int id) {
+        assert id > 0 : "Id must be greater than 0";
         String query = "SELECT * FROM semiyears WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -79,6 +82,8 @@ public class SemiyearCRUD {
 
 
     public OperationResult getSemiyearByNameAndYear(String name, int studyYear) {
+        assert name != null : "Name is null";
+        assert studyYear > 0 : "Study year must be greater than 0";
         String query = "SELECT * FROM semiyears WHERE name = ? AND study_year = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -101,6 +106,9 @@ public class SemiyearCRUD {
 
 
     public OperationResult updateSemiyear(int id, String newName, int newStudyYear) {
+        assert id > 0 : "Id must be greater than 0";
+        assert newName != null : "Name is null";
+        assert newStudyYear > 0 : "Study year must be greater than 0";
         String query = "UPDATE semiyears SET name = ?, study_year = ? WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -119,6 +127,7 @@ public class SemiyearCRUD {
     }
 
     public OperationResult deleteSemiyear(int id) {
+        assert id > 0 : "Id must be greater than 0";
         String query = "DELETE FROM semiyears WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {

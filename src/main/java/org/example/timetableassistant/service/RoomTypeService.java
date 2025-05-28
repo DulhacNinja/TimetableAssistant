@@ -16,7 +16,11 @@ public class RoomTypeService {
     public List<RoomType> getAllRoomTypes() {
         try {
             URL url = new URI(BASE_URL + "/get-all").toURL();
+            assert url != null : "URL must not be null";
+
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            assert conn != null : "Connection must not be null";
+
             conn.setRequestMethod("GET");
 
             int responseCode = conn.getResponseCode();
@@ -24,15 +28,22 @@ public class RoomTypeService {
                 try (java.util.Scanner scanner = new java.util.Scanner(conn.getInputStream())) {
                     scanner.useDelimiter("\\A");
                     String json = scanner.hasNext() ? scanner.next() : "";
+                    assert json != null : "JSON must not be null";
 
                     ObjectMapper mapper = new ObjectMapper();
                     JsonNode root = mapper.readTree(json);
+                    assert root != null : "Root node must not be null";
+
                     JsonNode messageNode = root.get("message");
+                    assert messageNode != null : "Message node must not be null";
+
                     List<RoomType> roomTypes = new ArrayList<>();
                     if (messageNode != null && messageNode.isArray()) {
+                        assert messageNode.size() <= roomTypes.size() : "messageNode size must be less or equal to roomTypes size";
                         for (JsonNode node : messageNode) {
                             RoomType roomType = new RoomType();
                             roomType.setName(node.get("name").asText());
+                            assert roomType.getName() != null : "Room type name must not be null";
                             // Set id if present
                             if (node.has("id")) {
                                 // RoomType class needs a setId method for this to work
@@ -43,7 +54,10 @@ public class RoomTypeService {
                                     // Ignore if setter doesn't exist
                                 }
                             }
+                            assert roomType != null : "Room type must not be null";
                             roomTypes.add(roomType);
+                            assert messageNode.size() <= roomTypes.size() : "messageNode size must be less or equal to roomTypes size";
+
                         }
                     }
                     return roomTypes;
@@ -57,9 +71,14 @@ public class RoomTypeService {
     }
 
     public RoomType getRoomTypeById(int id) {
+        assert id > 0 : "Id must be greater than 0";
         try {
             URL url = new URI(BASE_URL + "/" + id).toURL();
+            assert url != null : "URL must not be null";
+
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            assert conn != null : "Connection must not be null";
+
             conn.setRequestMethod("GET");
 
             int responseCode = conn.getResponseCode();
@@ -67,13 +86,19 @@ public class RoomTypeService {
                 try (java.util.Scanner scanner = new java.util.Scanner(conn.getInputStream())) {
                     scanner.useDelimiter("\\A");
                     String json = scanner.hasNext() ? scanner.next() : "";
+                    assert json != null : "json must not be null";
 
                     ObjectMapper mapper = new ObjectMapper();
                     JsonNode root = mapper.readTree(json);
+                    assert root != null : "Root node must not be null";
+
                     JsonNode messageNode = root.get("message");
+                    assert messageNode != null : "Message node must not be null";
+
                     if (messageNode != null && messageNode.isObject()) {
                         RoomType roomType = new RoomType();
                         roomType.setName(messageNode.get("name").asText());
+                        assert roomType.getName() != null : "Room type name must not be null";
                         // Set id if present
                         if (messageNode.has("id")) {
                             // RoomType class needs a setId method for this to work
@@ -84,6 +109,7 @@ public class RoomTypeService {
                                 // Ignore if setter doesn't exist
                             }
                         }
+                        assert roomType != null : "Room type must not be null";
                         return roomType;
                     }
                 }

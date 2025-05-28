@@ -17,6 +17,14 @@ public class ClassCRUD {
 
     public OperationResult insertClass(int disciplineId, ClassType classType, int roomId, int timeSlotId,
                                        Semiyear semiyear, Integer groupId, int teacherId) {
+        assert disciplineId > 0 : "disciplineId must be greater than 0";
+        assert classType != null : "classType must not be null";
+        assert roomId > 0 : "roomId must be greater than 0";
+        assert timeSlotId > 0 : "timeSlotId must be greater than 0";
+        assert semiyear != null : "semiyear must not be null";
+        assert groupId > 0 : "groupId must be greater than 0";
+        assert teacherId > 0 : "teacherId must be greater than 0";
+
         if (classType == ClassType.COURSE) {
             if (semiyear == null || groupId != null) {
                 return new OperationResult(false, "Pentru tipul CURS trebuie să existe semiyearId și să NU existe groupId.");
@@ -55,6 +63,7 @@ public class ClassCRUD {
     }
 
     public OperationResult getClassById(int id) {
+        assert id > 0 : "id must be greater than 0";
         String query = "SELECT * FROM classes WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -84,6 +93,15 @@ public class ClassCRUD {
 
     public OperationResult updateClass(int id, int disciplineId, ClassType classType, int roomId, int timeSlotId,
                                        Semiyear semiyear, Integer groupId, int teacherId) {
+        assert id > 0 : "id must be greater than 0";
+        assert disciplineId > 0 : "disciplineId must be greater than 0";
+        assert classType != null : "classType must not be null";
+        assert roomId > 0 : "roomId must be greater than 0";
+        assert timeSlotId > 0 : "timeSlotId must be greater than 0";
+        assert semiyear != null : "semiyear must not be null";
+        assert groupId > 0 : "groupId must be greater than 0";
+        assert teacherId > 0 : "teacherId must be greater than 0";
+
         if (classType == ClassType.COURSE) {
             if (semiyear == null || groupId != null) {
                 return new OperationResult(false, "Pentru tipul CURS trebuie să existe semiyearId și să NU existe groupId.");
@@ -119,6 +137,7 @@ public class ClassCRUD {
 
 
     public OperationResult getClassesByTimeSlotId(int time_slot_id) {
+        assert time_slot_id > 0 : "time_slot_id must be greater than 0";
         String query = "SELECT * FROM classes WHERE time_slot_id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -150,6 +169,7 @@ public class ClassCRUD {
 
 
     public OperationResult deleteClass(int id) {
+        assert id > 0 : "id must be greater than 0";
         String query = "DELETE FROM classes WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -166,6 +186,7 @@ public class ClassCRUD {
     }
 
     public OperationResult getClassesByGroupId(int groupId) {
+        assert groupId > 0 : "groupId must be greater than 0";
         String query = "SELECT * FROM classes WHERE group_id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -195,6 +216,7 @@ public class ClassCRUD {
     }
 
     public OperationResult getClassesByRoomId(int roomId) {
+        assert roomId > 0 : "roomId must be greater than 0";
         String query = "SELECT * FROM classes WHERE room_id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -224,6 +246,7 @@ public class ClassCRUD {
     }
 
     public OperationResult getClassesBySemiyear(Semiyear semiyear) {
+        assert semiyear != null : "semi year must not be null";
         String query = "SELECT * FROM classes WHERE semiyear = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -253,6 +276,7 @@ public class ClassCRUD {
     }
 
     public OperationResult getClassesByTeacherId(int teacherId) {
+        assert teacherId > 0 : "teacherId must be greater than 0";
         String query = "SELECT * FROM classes WHERE teacher_id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -283,6 +307,7 @@ public class ClassCRUD {
 
 
     public OperationResult getClassesByDisciplineId(int disciplineId) {
+        assert disciplineId > 0 : "disciplineId must be greater than 0";
         String query = "SELECT * FROM classes WHERE discipline_id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {

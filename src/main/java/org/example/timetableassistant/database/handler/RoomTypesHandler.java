@@ -15,6 +15,9 @@ public class RoomTypesHandler {
 
 
     public static String createRoomType(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         String name = req.queryParams("name");
 
         if (name == null || name.isEmpty()) {
@@ -23,6 +26,7 @@ public class RoomTypesHandler {
         }
 
         OperationResult result = roomTypeCRUD.insertRoomType(name);
+        assert result != null : "Result cannot be null";
 
         if (result.success) {
             res.status(201);  // Created
@@ -34,10 +38,12 @@ public class RoomTypesHandler {
     }
 
     public static String getRoomTypeById(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         int id = Integer.parseInt(req.params(":id"));
-
+        assert id > 0 : "id must be greater than 0";
         OperationResult result = roomTypeCRUD.getRoomTypeById(id);
-
+        assert result != null : "Result cannot be null";
         Gson gson = new Gson();
 
         if (result.success) {
@@ -55,7 +61,12 @@ public class RoomTypesHandler {
 
 
     public static String updateRoomType(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         int id = Integer.parseInt(req.params(":id"));
+        assert id > 0 : "id must be greater than 0";
+
         String newName = req.queryParams("name");
 
         if (newName == null || newName.isEmpty()) {
@@ -64,6 +75,7 @@ public class RoomTypesHandler {
         }
 
         OperationResult result = roomTypeCRUD.updateRoomType(id, newName);
+        assert result != null : "Result cannot be null";
 
         if (result.success) {
             res.status(200);  // OK
@@ -76,10 +88,13 @@ public class RoomTypesHandler {
 
 
     public static String deleteRoomType(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         int id = Integer.parseInt(req.params(":id"));
+        assert id > 0 : "id must be greater than 0";
 
         OperationResult result = roomTypeCRUD.deleteRoomType(id);
-
+        assert result != null : "Result cannot be null";
         if (result.success) {
             res.status(200);  // OK
             return "{\"message\":\"" + result.message + "\"}";
@@ -90,7 +105,10 @@ public class RoomTypesHandler {
     }
 
     public static String getAllRoomTypes(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         OperationResult result = roomTypeCRUD.getAllRoomTypes();
+        assert result != null : "Result cannot be null";
         Gson gson = new Gson();
 
         if (result.success) {

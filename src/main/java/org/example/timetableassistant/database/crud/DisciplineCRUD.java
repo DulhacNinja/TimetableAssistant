@@ -14,6 +14,7 @@ public class DisciplineCRUD {
     private static final String PASSWORD = DatabaseConfig.getPassword();
 
     public OperationResult insertDiscipline(String name) {
+        assert name != null : "Name is null";
         String query = "INSERT INTO disciplines (name) VALUES (?)";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -27,6 +28,7 @@ public class DisciplineCRUD {
 
 
     public OperationResult getDisciplineById(int id) {
+        assert id > 0 : "Id must be greater than 0";
         String query = "SELECT * FROM disciplines WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -74,6 +76,8 @@ public class DisciplineCRUD {
 
 
     public OperationResult updateDiscipline(int id, String newName) {
+        assert id > 0 : "Id must be greater than 0";
+        assert newName != null : "Name is null";
         String query = "UPDATE disciplines SET name = ? WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -92,6 +96,7 @@ public class DisciplineCRUD {
 
 
     public OperationResult deleteDiscipline(int id) {
+        assert id > 0 : "Id must be greater than 0";
         String query = "DELETE FROM disciplines WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(query)) {

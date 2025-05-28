@@ -16,4 +16,5 @@ public class OperationResult {
     public String getMessage() {
         return message.toString();
     }
+
 }

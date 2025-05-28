@@ -12,6 +12,8 @@ public class DisciplineHandler {
 
 
     public static String createDiscipline(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         String name = req.queryParams("name");
 
         if (name == null || name.isEmpty()) {
@@ -20,7 +22,7 @@ public class DisciplineHandler {
         }
 
         OperationResult result = disciplineCRUD.insertDiscipline(name);
-
+        assert result != null : "result cannot be null";
         if (result.success) {
             res.status(201);
             return "{\"message\":\"" + result.message + "\"}";
@@ -33,10 +35,13 @@ public class DisciplineHandler {
 
 
     public static String getDisciplineById(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         int id = Integer.parseInt(req.params(":id"));
-
+        assert id > 0 : "id must be greater than 0";
         OperationResult result = disciplineCRUD.getDisciplineById(id);
-
+        assert result != null : "result cannot be null";
         Gson gson = new Gson();
 
         if (result.success) {
@@ -54,8 +59,10 @@ public class DisciplineHandler {
 
 
     public static String getAllDisciplines(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         OperationResult result = disciplineCRUD.getAllDisciplines();
-
+        assert result != null : "result cannot be null";
         Gson gson = new Gson();
         if (result.success) {
             res.status(200);
@@ -73,7 +80,11 @@ public class DisciplineHandler {
 
 
     public static String updateDiscipline(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         int id = Integer.parseInt(req.params(":id"));
+        assert id > 0 : "id must be greater than 0";
         String newName = req.queryParams("name");
 
         if (newName == null || newName.isEmpty()) {
@@ -82,7 +93,7 @@ public class DisciplineHandler {
         }
 
         OperationResult result = disciplineCRUD.updateDiscipline(id, newName);
-
+        assert result != null : "result cannot be null";
         if (result.success) {
             res.status(200);
             return "{\"message\":\"" + result.message + "\"}";
@@ -94,10 +105,12 @@ public class DisciplineHandler {
 
 
     public static String deleteDiscipline(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         int id = Integer.parseInt(req.params(":id"));
-
+        assert id > 0 : "id must be greater than 0";
         OperationResult result = disciplineCRUD.deleteDiscipline(id);
-
+        assert result != null : "result cannot be null";
         if (result.success) {
             res.status(200);
             return "{\"message\":\"" + result.message + "\"}";

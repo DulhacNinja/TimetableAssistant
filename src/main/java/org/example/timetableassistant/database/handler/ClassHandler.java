@@ -12,11 +12,21 @@ import spark.Response;
 public class ClassHandler {
     private static final ClassCRUD classCRUD = new ClassCRUD();
     public static String createClass(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         int disciplineId = Integer.parseInt(req.queryParams("discipline_id"));
+        assert disciplineId > 0 : "discipline_id must be greater 0";
+
         String classTypeString = req.queryParams("class_type");
+        assert classTypeString != null && !classTypeString.isEmpty(): "class_type cannot be null nor empty";
+
         int roomId = Integer.parseInt(req.queryParams("room_id"));
+        assert roomId > 0 : "room_id must be greater 0";
         int timeSlotId = Integer.parseInt(req.queryParams("time_slot_id"));
+        assert timeSlotId > 0 : "time_slot_id must be greater 0";
         int teacherId = Integer.parseInt(req.queryParams("teacher_id"));
+        assert teacherId > 0 : "teacher_id must be greater 0";
 
         // Valori opționale
         String semiyearStr = req.queryParams("semiyear");
@@ -55,6 +65,7 @@ public class ClassHandler {
                 groupId,
                 teacherId
         );
+        assert result != null : "result cannot be null";
 
         if (result.success) {
             res.status(201);
@@ -67,9 +78,13 @@ public class ClassHandler {
 
 
     public static String getClassById(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         int id = Integer.parseInt(req.params(":id"));
+        assert id > 0 : "id must be greater 0";
 
         OperationResult result = classCRUD.getClassById(id);
+        assert result != null : "result cannot be null";
 
         Gson gson = new Gson();
 
@@ -87,10 +102,12 @@ public class ClassHandler {
     }
 
     public static String getClassesByTimeSlotId(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         int time_slot_id = Integer.parseInt(req.params(":time_slot_id"));
 
         OperationResult result = classCRUD.getClassesByTimeSlotId(time_slot_id);
-
+        assert result != null : "result cannot be null";
         Gson gson = new Gson();
 
         if (result.success) {
@@ -108,12 +125,20 @@ public class ClassHandler {
 
 
     public static String updateClass(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         int id = Integer.parseInt(req.params(":id"));
+        assert id > 0 : "id must be greater 0";
         int disciplineId = Integer.parseInt(req.queryParams("discipline_id"));
+        assert disciplineId > 0 : "discipline_id must be greater 0";
         String classTypeString = req.queryParams("class_type");
+        assert classTypeString != null && !classTypeString.isEmpty(): "class_type cannot be null";
         int roomId = Integer.parseInt(req.queryParams("room_id"));
+        assert roomId > 0 : "room_id must be greater 0";
         int timeSlotId = Integer.parseInt(req.queryParams("time_slot_id"));
+        assert timeSlotId > 0 : "time_slot_id must be greater 0";
         int teacherId = Integer.parseInt(req.queryParams("teacher_id"));
+        assert teacherId > 0 : "teacher_id must be greater 0";
 
         String semiyearStr = req.queryParams("semiyear");
         Semiyear semiyear = null;
@@ -150,6 +175,7 @@ public class ClassHandler {
                 groupId,
                 teacherId
         );
+        assert result != null : "result cannot be null";
 
         if (result.success) {
             res.status(200);
@@ -162,9 +188,13 @@ public class ClassHandler {
 
 
     public static String deleteClass(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         int id = Integer.parseInt(req.params(":id"));
+        assert id > 0 : "id must be greater 0";
 
         OperationResult result = classCRUD.deleteClass(id);
+        assert result != null : "result cannot be null";
 
         if (result.success) {
             res.status(201);
@@ -177,10 +207,13 @@ public class ClassHandler {
 
 
     public static String getClassesByGroupId(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
         int groupId = Integer.parseInt(req.params(":groupId"));
+        assert groupId > 0 : "group_id must be greater 0";
 
         OperationResult result = classCRUD.getClassesByGroupId(groupId);
-
+        assert result != null : "result cannot be null";
         Gson gson = new Gson();
 
         if (result.success) {
@@ -197,9 +230,14 @@ public class ClassHandler {
     }
 
     public static String getClassesByRoomId(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         int roomId = Integer.parseInt(req.params(":roomId"));
+        assert roomId > 0 : "room_id must be greater 0";
 
         OperationResult result = classCRUD.getClassesByRoomId(roomId);
+        assert result != null : "result cannot be null";
 
         Gson gson = new Gson();
 
@@ -217,7 +255,11 @@ public class ClassHandler {
     }
 
     public static String getClassesBySemiyear(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         String semiyearStr = req.params(":semiyear");
+        assert semiyearStr != null && !semiyearStr.isEmpty(): "semiyear cannot be null";
         if (semiyearStr == null) {
             res.status(400);
             return "{\"error\":\"Semiyear is required and cannot be null.\"}";
@@ -234,6 +276,7 @@ public class ClassHandler {
         }
 
         OperationResult result = classCRUD.getClassesBySemiyear(semiyear);
+        assert result != null : "result cannot be null";
 
         Gson gson = new Gson();
 
@@ -251,9 +294,14 @@ public class ClassHandler {
     }
 
     public static String getClassesByTeacherId(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         int teacherId = Integer.parseInt(req.params(":teacherId"));
+        assert teacherId > 0 : "teacher_id must be greater 0";
 
         OperationResult result = classCRUD.getClassesByTeacherId(teacherId);
+        assert result != null : "result cannot be null";
 
         Gson gson = new Gson();
 
@@ -272,16 +320,21 @@ public class ClassHandler {
 
 
     public static String getClassesByDisciplineId(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         int disciplineId;
 
         try {
             disciplineId = Integer.parseInt(req.params(":disciplineId"));
+            assert disciplineId > 0 : "discipline_id must be greater 0";
         } catch (NumberFormatException e) {
             res.status(400);
             return "{\"error\":\"ID invalid pentru disciplină.\"}";
         }
 
         OperationResult result = classCRUD.getClassesByDisciplineId(disciplineId);
+        assert result != null : "result cannot be null";
 
         Gson gson = new Gson();
         Map<String, Object> response = new HashMap<>();
@@ -299,7 +352,11 @@ public class ClassHandler {
 
 
     public static String getAllClasses(Request req, Response res) {
+        assert req != null : "req cannot be null";
+        assert res != null : "res cannot be null";
+
         OperationResult result = classCRUD.getAllClasses();
+        assert result != null : "result cannot be null";
 
         Gson gson = new Gson();
         Map<String, Object> response = new HashMap<>();
