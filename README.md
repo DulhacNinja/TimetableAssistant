@@ -215,7 +215,7 @@ All asserts check if variables are null / strings are empty / ids are less or eq
 
 * Aron Robert(Contributions: App interface, updates to service logic, unit tests for group and class modules, and project documentation.)
 * Chichirau Claudiu (Contibutions: Database, Crud Operations (Create, Update, Delete, Get) and Handlers for the DB entities, unit tests for Discipline and Room, project documentation - Program Design & Implementation)
-* Dulhac Alexandru
+* Dulhac Alexandru (Contributions: Export functionality, asserts and project documentation.)
 * Onofrei Maria
 
 _Quality of Software Systems Project
